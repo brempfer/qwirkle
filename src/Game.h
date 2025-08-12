@@ -45,7 +45,7 @@ private:
     static constexpr int TILE_SIZE = 64;
     static constexpr int BUTTON_WIDTH = 90;
     static constexpr int BUTTON_HEIGHT = 40;
-    static constexpr int HAND_SLOT_PADDING = 8;
+    static constexpr int HAND_SLOT_PADDING = 6;
 
     // UI helpers
     bool pointInRect(sf::Vector2f point, sf::RectangleShape& rect);
