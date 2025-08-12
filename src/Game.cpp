@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <cmath>
 #include <iostream>
@@ -9,9 +8,9 @@ static const std::map<Shape, std::string> shapeNames = {
     {Shape::Circle, "O"},
     {Shape::Square, "S"},
     {Shape::Diamond, "D"},
-    {Shape::Star, "A"},
+    {Shape::Astericks, "A"},
     {Shape::Clover, "C"},
-    {Shape::Cross,  "F"}
+    {Shape::Fourpoint,  "F"}
 };
 
 static const std::map<Color, std::string> colorNames = {
@@ -55,7 +54,7 @@ bool Game::loadTextures(const std::string& assetsDir) {
             }
             tex.setSmooth(true);
             tileTextures[{s, c}] = std::move(tex);
-            ++loaded;
+            loaded+=1;
         }
     }
     if (loaded == 0) {
@@ -69,7 +68,7 @@ bool Game::loadTextures(const std::string& assetsDir) {
 void Game::initTileBag() {
     tileBag.clear();
     tileBag.reserve(108);
-    for (const auto& s : { Shape::Circle, Shape::Square, Shape::Diamond, Shape::Star, Shape::Clover, Shape::Cross }) {
+    for (const auto& s : { Shape::Circle, Shape::Square, Shape::Diamond, Shape::Astericks, Shape::Clover, Shape::Fourpoint }) {
         for (const auto& c : { Color::Red, Color::Orange, Color::Yellow, Color::Green, Color::Blue, Color::Purple }) {
             for (int copy = 0; copy < 3; ++copy) {
                 tileBag.push_back(Tile{ s, c });
@@ -141,29 +140,6 @@ void Game::drawTile(sf::RenderWindow& window, int x, int y, const Tile& tile) {
         window.draw(sprite);
         return;
     }
-
-    // fallback: simple rectangle + circle
-    sf::RectangleShape rect(sf::Vector2f(TILE_SIZE - 4, TILE_SIZE - 4));
-    rect.setFillColor(sf::Color::White);
-    rect.setOutlineThickness(2);
-    rect.setOutlineColor(sf::Color::Black);
-    rect.setPosition(x * TILE_SIZE, y * TILE_SIZE);
-    window.draw(rect);
-
-    sf::CircleShape shape(TILE_SIZE / 3);
-    sf::Color sc = sf::Color::White;
-    switch (tile.color) {
-        case Color::Red:    sc = sf::Color::Red; break;
-        case Color::Orange: sc = sf::Color(255,165,0); break;
-        case Color::Yellow: sc = sf::Color::Yellow; break;
-        case Color::Green:  sc = sf::Color::Green; break;
-        case Color::Blue:   sc = sf::Color::Blue; break;
-        case Color::Purple: sc = sf::Color(128,0,128); break;
-    }
-    shape.setFillColor(sc);
-    shape.setOrigin(shape.getRadius(), shape.getRadius());
-    shape.setPosition(x * TILE_SIZE + TILE_SIZE / 2, y * TILE_SIZE + TILE_SIZE / 2);
-    window.draw(shape);
 }
 
 bool Game::pointInRect(sf::Vector2f point, sf::RectangleShape& rect) {
@@ -221,29 +197,6 @@ void Game::drawHand(sf::RenderWindow& window, const sf::Font& font) {
                 sprite.setScale(scaleX, scaleY);
                 // Draw in default view space; caller must ensure default view is set
                 window.draw(sprite);
-            } else {
-                // fallback drawing using simple shapes in UI coords
-                sf::RectangleShape rect(sf::Vector2f(static_cast<float>(TILE_SIZE) - 4, static_cast<float>(TILE_SIZE) - 4));
-                rect.setPosition(x + 2, y + 2);
-                rect.setFillColor(sf::Color::White);
-                rect.setOutlineThickness(2);
-                rect.setOutlineColor(sf::Color::Black);
-                window.draw(rect);
-
-                sf::CircleShape shape(static_cast<float>(TILE_SIZE) / 3.0f);
-                sf::Color sc = sf::Color::White;
-                switch (t.color) {
-                    case Color::Red:    sc = sf::Color::Red; break;
-                    case Color::Orange: sc = sf::Color(255,165,0); break;
-                    case Color::Yellow: sc = sf::Color::Yellow; break;
-                    case Color::Green:  sc = sf::Color::Green; break;
-                    case Color::Blue:   sc = sf::Color::Blue; break;
-                    case Color::Purple: sc = sf::Color(128,0,128); break;
-                }
-                shape.setFillColor(sc);
-                shape.setOrigin(shape.getRadius(), shape.getRadius());
-                shape.setPosition(x + TILE_SIZE / 2.0f, y + TILE_SIZE / 2.0f);
-                window.draw(shape);
             }
         } else {
             // empty slot label

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Board.h"
-#include <SFML/Graphics.hpp>
 #include <map>
 #include <optional>
 #include <random>
