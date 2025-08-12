@@ -28,6 +28,12 @@ private:
     void refillHand();
     void resetUnconfirmedTiles();
 
+    // Drag-and-drop state
+    // bool isDraggingTile = false;
+    // int dragHandIndex = -1;  // Which slot in the hand we’re dragging from
+    // sf::Vector2f dragOffset; // Offset from mouse to tile center
+    // Tile draggedTile;        // Copy of the tile being dragged
+
     // Player hand: 6 slots, optional if empty
     std::vector<std::optional<Tile>> playerHand; // size 6
 
