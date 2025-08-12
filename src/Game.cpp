@@ -68,10 +68,10 @@ bool Game::loadTextures(const std::string& assetsDir) {
 void Game::initTileBag() {
     tileBag.clear();
     tileBag.reserve(108);
-    for (const auto& s : { Shape::Circle, Shape::Square, Shape::Diamond, Shape::Astericks, Shape::Clover, Shape::Fourpoint }) {
-        for (const auto& c : { Color::Red, Color::Orange, Color::Yellow, Color::Green, Color::Blue, Color::Purple }) {
+    for (const auto& shape : { Shape::Circle, Shape::Square, Shape::Diamond, Shape::Astericks, Shape::Clover, Shape::Fourpoint }) {
+        for (const auto& color : { Color::Red, Color::Orange, Color::Yellow, Color::Green, Color::Blue, Color::Purple }) {
             for (int copy = 0; copy < 3; ++copy) {
-                tileBag.push_back(Tile{ s, c });
+                tileBag.push_back(Tile{ shape, color });
             }
         }
     }
@@ -430,6 +430,21 @@ void Game::run() {
         window.draw(resetHandBtnLocal);
         window.draw(resetHandText);
 
+        // Display remaining tiles count in bottom right
+        sf::Text bagCountText;
+        bagCountText.setFont(font);
+        bagCountText.setCharacterSize(20);
+        bagCountText.setFillColor(sf::Color::Black);
+
+        std::string bagText = "Tiles left: " + std::to_string(tileBag.size());
+        bagCountText.setString(bagText);
+
+        // Position in bottom-right corner
+        sf::FloatRect textBounds = bagCountText.getLocalBounds();
+        bagCountText.setOrigin(textBounds.width, 0); // right-align
+        bagCountText.setPosition(window.getSize().x - 10.f, window.getSize().y - BUTTON_HEIGHT - 10.f); 
+
+        window.draw(bagCountText);
 
 
         window.display();
